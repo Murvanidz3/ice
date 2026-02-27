@@ -80,20 +80,62 @@ export default function Sidebar({
                         <h2 className="text-white/80 text-xs font-semibold uppercase tracking-widest">
                             პროექტები
                         </h2>
-                        <button
-                            onClick={() => setCollapsed(true)}
-                            className="w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-colors cursor-pointer"
-                            title="მენიუს დამალვა"
-                        >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2" strokeLinecap="round">
-                                <polyline points="11 17 6 12 11 7" />
-                                <polyline points="18 17 13 12 18 7" />
-                            </svg>
-                        </button>
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={() => setIsAdding(true)}
+                                className="w-7 h-7 rounded-md bg-white/15 hover:bg-white/25 flex items-center justify-center transition-colors cursor-pointer"
+                                title="ახალი პროექტი"
+                            >
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
+                                    <line x1="12" y1="5" x2="12" y2="19" />
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>
+                            </button>
+                            <button
+                                onClick={() => setCollapsed(true)}
+                                className="w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-colors cursor-pointer"
+                                title="მენიუს დამალვა"
+                            >
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2" strokeLinecap="round">
+                                    <polyline points="11 17 6 12 11 7" />
+                                    <polyline points="18 17 13 12 18 7" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
 
                     {/* Project List */}
                     <div className="flex-1 overflow-y-auto py-2 px-2">
+                        {/* Add Project Input */}
+                        {isAdding && (
+                            <div className="animate-fade-in mb-2 px-1">
+                                <input
+                                    ref={addInputRef}
+                                    value={newName}
+                                    onChange={(e) => setNewName(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') handleAdd();
+                                        if (e.key === 'Escape') { setIsAdding(false); setNewName(''); }
+                                    }}
+                                    placeholder="პროექტის სახელი..."
+                                    className="w-full bg-white/10 text-white placeholder:text-white/40 text-sm rounded-lg px-3 py-2.5 outline-none focus:ring-1 focus:ring-ice-400/50"
+                                />
+                                <div className="flex gap-2 mt-2">
+                                    <button
+                                        onClick={handleAdd}
+                                        className="px-3 py-1.5 bg-ice-500 hover:bg-ice-600 text-white text-xs font-medium rounded-lg transition-colors cursor-pointer"
+                                    >
+                                        დამატება
+                                    </button>
+                                    <button
+                                        onClick={() => { setIsAdding(false); setNewName(''); }}
+                                        className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white/70 text-xs font-medium rounded-lg transition-colors cursor-pointer"
+                                    >
+                                        გაუქმება
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                         {projects.map((proj, idx) => (
                             <div key={proj.id} className="relative group">
                                 {editingId === proj.id ? (
@@ -172,49 +214,7 @@ export default function Sidebar({
                         ))}
                     </div>
 
-                    {/* Add Project */}
-                    <div className="px-2 pb-3">
-                        {isAdding ? (
-                            <div className="animate-fade-in">
-                                <input
-                                    ref={addInputRef}
-                                    value={newName}
-                                    onChange={(e) => setNewName(e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') handleAdd();
-                                        if (e.key === 'Escape') { setIsAdding(false); setNewName(''); }
-                                    }}
-                                    placeholder="პროექტის სახელი..."
-                                    className="w-full bg-white/10 text-white placeholder:text-white/40 text-sm rounded-lg px-3 py-2.5 outline-none focus:ring-1 focus:ring-ice-400/50"
-                                />
-                                <div className="flex gap-2 mt-2">
-                                    <button
-                                        onClick={handleAdd}
-                                        className="px-3 py-1.5 bg-ice-500 hover:bg-ice-600 text-white text-xs font-medium rounded-lg transition-colors cursor-pointer"
-                                    >
-                                        დამატება
-                                    </button>
-                                    <button
-                                        onClick={() => { setIsAdding(false); setNewName(''); }}
-                                        className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white/70 text-xs font-medium rounded-lg transition-colors cursor-pointer"
-                                    >
-                                        გაუქმება
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <button
-                                onClick={() => setIsAdding(true)}
-                                className="w-full text-left px-3 py-2.5 text-white/50 hover:text-white/80 hover:bg-white/8 text-sm rounded-lg transition-all flex items-center gap-2 cursor-pointer"
-                            >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                                    <line x1="12" y1="5" x2="12" y2="19" />
-                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                </svg>
-                                ახალი პროექტი
-                            </button>
-                        )}
-                    </div>
+
                 </div>
             </aside>
 
