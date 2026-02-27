@@ -170,7 +170,7 @@ export default function CardModal({
 
                         <div className="flex flex-col lg:flex-row gap-6">
                             {/* Main Content */}
-                            <div className="flex-1 space-y-6 min-w-0">
+                            <div className="flex-1 space-y-6 min-w-0 relative z-0">
                                 {/* Labels */}
                                 {labels.length > 0 && (
                                     <div>
@@ -302,9 +302,9 @@ export default function CardModal({
                             </div>
 
                             {/* Sidebar Actions */}
-                            <div className="lg:w-[180px] shrink-0">
+                            <div className="lg:w-[180px] shrink-0 relative z-10">
                                 <h4 className="text-xs font-semibold text-frost-400 uppercase tracking-wider mb-3">მოქმედებები</h4>
-                                <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0">
+                                <div className="flex flex-row lg:flex-col gap-2 flex-wrap pb-2 lg:pb-0">
 
                                     {/* Labels */}
                                     <div className="relative">
@@ -411,13 +411,13 @@ export default function CardModal({
 
                                     {/* Due Date */}
                                     <div className="relative">
-                                        <div className="w-full flex items-center gap-2 px-3 py-2 bg-frost-100 hover:bg-frost-200 text-frost-700 text-sm font-medium rounded-lg transition-colors">
+                                        <label className="w-full flex items-center gap-2 px-3 py-2 bg-frost-100 hover:bg-frost-200 text-frost-700 text-sm font-medium rounded-lg transition-colors cursor-pointer">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
                                             </svg>
                                             <span className="flex-1 text-left">ვადა</span>
-                                        </div>
-                                        <input type="date" value={card.dueDate || ''} onChange={handleDueDateChange} className="absolute inset-0 opacity-0 cursor-pointer w-full" />
+                                            <input type="date" value={card.dueDate || ''} onChange={handleDueDateChange} className="absolute inset-0 opacity-0 cursor-pointer w-full h-full" style={{ zIndex: 1 }} />
+                                        </label>
                                     </div>
 
                                     {/* Move */}
