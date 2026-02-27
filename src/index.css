@@ -55,19 +55,25 @@
 
 /* ===== Base Styles ===== */
 html,
-body,
-#root {
+body {
   height: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
 
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  --bg-gradient: linear-gradient(135deg, #0c4a6e 0%, #7c3aed 30%, #c026d3 50%, #f43f5e 70%, #f97316 100%);
+  background: var(--bg-gradient);
+  min-height: 100%;
+}
+
 body {
   font-family: var(--font-sans);
-  --bg-gradient: linear-gradient(135deg, #0c4a6e 0%, #0369a1 25%, #0ea5e9 50%, #38bdf8 75%, #7dd3fc 100%);
-  background: var(--bg-gradient);
-  background-attachment: fixed;
   color: #1e293b;
 }
 

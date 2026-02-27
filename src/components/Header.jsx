@@ -20,7 +20,8 @@ function getGradientKey(username) {
 }
 
 function applyGradient(gradient) {
-    document.body.style.setProperty('--bg-gradient', gradient);
+    const root = document.getElementById('root');
+    if (root) root.style.setProperty('--bg-gradient', gradient);
 }
 
 export default function Header({ activeProject, currentUser, isAdmin, resetBoard, logout, verifyPassword, changeOwnPassword, sidebarCollapsed, setSidebarCollapsed, onOpenUserManager, bgGradient, updateBackground }) {

@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import { LABEL_COLORS } from '../data/mockData';
 import { COVER_COLORS } from './Card';
 import ImageLightbox from './ImageLightbox';
+import DatePicker from './DatePicker';
 
 export default function CardModal({
     card,
@@ -25,12 +26,12 @@ export default function CardModal({
     const [showLinkInput, setShowLinkInput] = useState(false);
     const [linkUrl, setLinkUrl] = useState('');
     const [lightboxSrc, setLightboxSrc] = useState(null);
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
     const descRef = useRef(null);
     const checkInputRef = useRef(null);
     const fileInputRef = useRef(null);
     const linkInputRef = useRef(null);
-    const dateInputRef = useRef(null);
 
     useEffect(() => {
         if (isEditingDesc && descRef.current) {
@@ -89,8 +90,8 @@ export default function CardModal({
         updateCard(card.id, { checklist: (card.checklist || []).filter((item) => item.id !== itemId) });
     };
 
-    const handleDueDateChange = (e) => {
-        updateCard(card.id, { dueDate: e.target.value || null });
+    const handleDueDateChange = (dateStr) => {
+        updateCard(card.id, { dueDate: dateStr || null });
     };
 
     const addAttachmentByLink = () => {
@@ -319,7 +320,7 @@ export default function CardModal({
                                         {showLabelPicker && (
                                             <>
                                                 <div className="fixed inset-0 z-40" onClick={() => setShowLabelPicker(false)} />
-                                                <div className="absolute left-0 lg:left-auto lg:right-0 top-10 bg-white rounded-xl shadow-xl border border-frost-200 p-3 z-50 min-w-[220px] animate-fade-in">
+                                                <div className="absolute left-0 lg:left-auto lg:right-0 bottom-10 lg:bottom-auto lg:top-10 bg-white rounded-xl shadow-xl border border-frost-200 p-3 z-50 min-w-[220px] animate-fade-in">
                                                     <h5 className="text-xs font-semibold text-frost-400 uppercase tracking-wider mb-2">აირჩიეთ იარლიყი</h5>
                                                     <div className="space-y-1">
                                                         {LABEL_COLORS.map((label) => (
@@ -348,7 +349,7 @@ export default function CardModal({
                                         {showCoverPicker && (
                                             <>
                                                 <div className="fixed inset-0 z-40" onClick={() => setShowCoverPicker(false)} />
-                                                <div className="absolute left-0 lg:left-auto lg:right-0 top-10 bg-white rounded-xl shadow-xl border border-frost-200 p-3 z-50 min-w-[220px] animate-fade-in">
+                                                <div className="absolute left-0 lg:left-auto lg:right-0 bottom-10 lg:bottom-auto lg:top-10 bg-white rounded-xl shadow-xl border border-frost-200 p-3 z-50 min-w-[220px] animate-fade-in">
                                                     <h5 className="text-xs font-semibold text-frost-400 uppercase tracking-wider mb-2">აირჩიეთ ფერი</h5>
                                                     <div className="grid grid-cols-5 gap-1.5">
                                                         {COVER_COLORS.map((c) => (
@@ -378,7 +379,7 @@ export default function CardModal({
                                         {showAttachMenu && (
                                             <>
                                                 <div className="fixed inset-0 z-40" onClick={() => { setShowAttachMenu(false); setShowLinkInput(false); }} />
-                                                <div className="absolute left-0 lg:left-auto lg:right-0 top-10 bg-white rounded-xl shadow-xl border border-frost-200 py-1 z-50 min-w-[200px] animate-fade-in">
+                                                <div className="absolute left-0 lg:left-auto lg:right-0 bottom-10 lg:bottom-auto lg:top-10 bg-white rounded-xl shadow-xl border border-frost-200 py-1 z-50 min-w-[200px] animate-fade-in">
                                                     <button onClick={() => { fileInputRef.current?.click(); }}
                                                         className="w-full px-3 py-2 text-left text-sm text-frost-700 hover:bg-frost-50 flex items-center gap-2 cursor-pointer transition-colors">
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -412,15 +413,13 @@ export default function CardModal({
 
                                     {/* Due Date */}
                                     <div className="relative">
-                                        <button onClick={() => { if (dateInputRef.current) { dateInputRef.current.showPicker ? dateInputRef.current.showPicker() : dateInputRef.current.click(); } }}
+                                        <button onClick={() => setShowDatePicker(true)}
                                             className="w-full flex items-center gap-2 px-3 py-2 bg-frost-100 hover:bg-frost-200 text-frost-700 text-sm font-medium rounded-lg transition-colors cursor-pointer">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
                                             </svg>
                                             ვადა
                                         </button>
-                                        <input ref={dateInputRef} type="date" value={card.dueDate || ''} onChange={handleDueDateChange}
-                                            style={{ position: 'absolute', bottom: 0, left: 0, width: '1px', height: '1px', opacity: 0, pointerEvents: 'none' }} tabIndex={-1} aria-hidden="true" />
                                     </div>
 
                                     {/* Move */}
@@ -435,7 +434,7 @@ export default function CardModal({
                                         {showMoveMenu && (
                                             <>
                                                 <div className="fixed inset-0 z-40" onClick={() => setShowMoveMenu(false)} />
-                                                <div className="absolute left-0 lg:left-auto lg:right-0 top-10 bg-white rounded-xl shadow-xl border border-frost-200 p-3 z-50 min-w-[200px] animate-fade-in">
+                                                <div className="absolute left-0 lg:left-auto lg:right-0 bottom-10 lg:bottom-auto lg:top-10 bg-white rounded-xl shadow-xl border border-frost-200 p-3 z-50 min-w-[200px] animate-fade-in">
                                                     <h5 className="text-xs font-semibold text-frost-400 uppercase tracking-wider mb-2">გადატანა სიაში</h5>
                                                     <div className="space-y-1">
                                                         {lists.map((l) => (
@@ -468,6 +467,7 @@ export default function CardModal({
             </div>
 
             {lightboxSrc && <ImageLightbox src={lightboxSrc} onClose={() => setLightboxSrc(null)} />}
+            {showDatePicker && <DatePicker value={card.dueDate || ''} onChange={handleDueDateChange} onClose={() => setShowDatePicker(false)} />}
         </>
     );
 }
