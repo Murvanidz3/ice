@@ -113,7 +113,7 @@ export default function Header({ activeProject, currentUser, isAdmin, resetBoard
                                 <line x1="22" y1="12" x2="19" y2="10" /><line x1="22" y1="12" x2="19" y2="14" />
                             </svg>
                         </div>
-                        <h1 className="text-white font-bold text-xl tracking-tight leading-none">ICE</h1>
+                        <h1 className="text-white font-bold text-xl tracking-tight leading-none">ჭრელო</h1>
                     </a>
                     {activeProject && (
                         <>
