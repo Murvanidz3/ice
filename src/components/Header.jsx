@@ -105,7 +105,7 @@ export default function Header({ activeProject, currentUser, isAdmin, resetBoard
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
                         </button>
                     )}
-                    <a href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity" onClick={(e) => { e.preventDefault(); window.location.href = '/'; }}>
+                    <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <line x1="12" y1="2" x2="12" y2="22" /><line x1="2" y1="12" x2="22" y2="12" />
@@ -118,7 +118,7 @@ export default function Header({ activeProject, currentUser, isAdmin, resetBoard
                             </svg>
                         </div>
                         <h1 className="text-white font-bold text-xl tracking-tight leading-none">ჭრელო</h1>
-                    </a>
+                    </div>
                     {activeProject && (
                         <>
                             <span className="text-white/30 text-lg">/</span>
