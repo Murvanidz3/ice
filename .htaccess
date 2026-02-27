@@ -3,13 +3,11 @@ RewriteEngine On
 # If the request is for the API folder, let it pass through directly
 RewriteRule ^api/ - [L]
 
-# If the request is for an actual file in dist/, serve it
-RewriteCond %{DOCUMENT_ROOT}/dist%{REQUEST_URI} -f
-RewriteRule ^(.*)$ dist/$1 [L]
+# If the request matches a real file inside dist/, serve it directly
+RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f
+RewriteRule ^(.+)$ dist/$1 [L]
 
-# If the request is for an actual directory in dist/, serve it
-RewriteCond %{DOCUMENT_ROOT}/dist%{REQUEST_URI} -d
-RewriteRule ^(.*)$ dist/$1 [L]
-
-# Otherwise, serve dist/index.html (React SPA routing)
-RewriteRule ^(.*)$ dist/index.html [L]
+# If the request is for the root or any route, serve dist/index.html (React SPA)
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteCond %{REQUEST_URI} !^/dist/
+RewriteRule ^.*$ dist/index.html [L]
