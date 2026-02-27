@@ -73,17 +73,20 @@ export default function Header({ activeProject, currentUser, isAdmin, resetBoard
         }
     };
 
-    const handleChangePassword = () => {
+    const handleChangePassword = async () => {
         setCpError('');
         setCpSuccess('');
         if (!oldPass) { setCpError('შეიყვანეთ მიმდინარე პაროლი'); return; }
-        if (!verifyPassword(oldPass)) { setCpError('მიმდინარე პაროლი არასწორია'); return; }
         if (newPass.length < 3) { setCpError('ახალი პაროლი მინიმუმ 3 სიმბოლო'); return; }
         if (newPass !== confirmPass) { setCpError('პაროლები არ ემთხვევა'); return; }
-        changeOwnPassword(newPass);
-        setCpSuccess('პაროლი წარმატებით შეიცვალა');
-        setOldPass(''); setNewPass(''); setConfirmPass('');
-        setTimeout(() => { setShowChangePassword(false); setCpSuccess(''); }, 1500);
+        const ok = await changeOwnPassword(newPass, oldPass);
+        if (ok) {
+            setCpSuccess('პაროლი წარმატებით შეიცვალა');
+            setOldPass(''); setNewPass(''); setConfirmPass('');
+            setTimeout(() => { setShowChangePassword(false); setCpSuccess(''); }, 1500);
+        } else {
+            setCpError('მიმდინარე პაროლი არასწორია ან შეცდომა მოხდა');
+        }
     };
 
     const closeChangePassword = () => {
