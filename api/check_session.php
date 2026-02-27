@@ -2,8 +2,7 @@
 // api/check_session.php
 require 'db.php';
 init_session();
-
-header('Content-Type: application/json');
+set_security_headers();
 
 if (isset($_SESSION['user_id'])) {
     echo json_encode([
@@ -15,6 +14,7 @@ if (isset($_SESSION['user_id'])) {
         ]
     ]);
 } else {
+    http_response_code(401);
     echo json_encode(['success' => false, 'message' => 'Not authenticated']);
 }
 ?>

@@ -4,8 +4,10 @@ require 'db.php';
 init_session();
 
 header('Content-Type: application/json');
+set_security_headers();
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Unauthorized']);
     exit;
 }
@@ -21,11 +23,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $action === 'list') {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'create') {
     $data = json_decode(file_get_contents('php://input'), true);
-    $username = trim($data['username'] ?? '');
+    $username = sanitize_string($data['username'] ?? '', 50);
     $password = $data['password'] ?? '';
 
     if (!$username || !$password) {
         echo json_encode(['success' => false, 'message' => 'Username and password required']);
+        exit;
+    }
+
+    // Validate username: alphanumeric + Georgian characters only
+    if (!preg_match('/^[\p{L}\p{N}_.-]+$/u', $username)) {
+        echo json_encode(['success' => false, 'message' => 'მომხმარებლის სახელი შეიცავს არასწორ სიმბოლოებს']);
+        exit;
+    }
+
+    if (strlen($password) > 256 || mb_strlen($password) < 3) {
+        echo json_encode(['success' => false, 'message' => 'პაროლი 3-256 სიმბოლო']);
         exit;
     }
 
@@ -58,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'delete') {
     $deleteId = $data['id'] ?? null;
 
     if (!$deleteId || $deleteId == $_SESSION['user_id']) {
+        http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Invalid user ID or cannot delete yourself']);
         exit;
     }
@@ -74,7 +88,8 @@ echo json_encode(['success' => false, 'message' => 'Invalid action']);
 function getDefaultTemplateBoard()
 {
     $uid = function () {
-        return substr(str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'), 0, 10); };
+        return substr(str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'), 0, 10);
+    };
 
     $card = function ($title, $opts = []) use ($uid) {
         return array_merge([

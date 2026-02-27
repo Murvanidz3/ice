@@ -1,5 +1,30 @@
 RewriteEngine On
 
+# --- Security: Block access to sensitive files and directories ---
+# Block access to .git, node_modules, src, and config files
+RewriteRule ^\.git - [F,L]
+RewriteRule ^node_modules - [F,L]
+RewriteRule ^src/ - [F,L]
+RewriteRule ^package\.json$ - [F,L]
+RewriteRule ^package-lock\.json$ - [F,L]
+RewriteRule ^vite\.config\.js$ - [F,L]
+RewriteRule ^database\.sql$ - [F,L]
+RewriteRule ^\.env - [F,L]
+RewriteRule ^tsconfig - [F,L]
+RewriteRule ^\.github - [F,L]
+
+# Block directory listing
+Options -Indexes
+
+# Security headers for all responses
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
 # If the request is for the API folder, let it pass through directly
 RewriteRule ^api/ - [L]
 

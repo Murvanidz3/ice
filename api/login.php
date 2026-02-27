@@ -2,20 +2,33 @@
 // api/login.php
 require 'db.php';
 init_session();
-
-header('Content-Type: application/json');
+set_security_headers();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+    http_response_code(405);
+    echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+    exit;
+}
+
+// Rate limit: max 5 login attempts per 5 minutes
+if (!check_rate_limit('login', 5, 300)) {
+    http_response_code(429);
+    echo json_encode(['success' => false, 'message' => 'ძალიან ბევრი მცდელობა. სცადეთ 5 წუთში.']);
     exit;
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
-$username = trim($data['username'] ?? '');
+$username = sanitize_string($data['username'] ?? '', 50);
 $password = $data['password'] ?? '';
 
 if (!$username || !$password) {
     echo json_encode(['success' => false, 'message' => 'Username and password required']);
+    exit;
+}
+
+// Limit password length to prevent DoS via very long passwords
+if (strlen($password) > 256) {
+    echo json_encode(['success' => false, 'message' => 'Password too long']);
     exit;
 }
 
@@ -24,9 +37,16 @@ $stmt->execute([$username]);
 $user = $stmt->fetch();
 
 if ($user && password_verify($password, $user['password_hash'])) {
+    // Regenerate session ID on login to prevent session fixation
+    session_regenerate_id(true);
+
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['username'] = $user['username'];
     $_SESSION['role'] = $user['role'];
+    $_SESSION['_created'] = time();
+
+    // Clear rate limit on successful login
+    unset($_SESSION['_rate_login']);
 
     echo json_encode([
         'success' => true,
@@ -37,6 +57,7 @@ if ($user && password_verify($password, $user['password_hash'])) {
         ]
     ]);
 } else {
+    // Generic error message — don't reveal if username exists
     echo json_encode(['success' => false, 'message' => 'არასწორი მომხმარებელი ან პაროლი']);
 }
 ?>

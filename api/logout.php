@@ -2,8 +2,7 @@
 // api/logout.php
 require 'db.php';
 init_session();
-
-header('Content-Type: application/json');
+set_security_headers();
 
 $_SESSION = [];
 if (ini_get("session.use_cookies")) {
