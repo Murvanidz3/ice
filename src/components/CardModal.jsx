@@ -176,7 +176,7 @@ export default function CardModal({
                                 {/* Labels */}
                                 {labels.length > 0 && (
                                     <div>
-                                        <h4 className="text-xs font-semibold text-frost-400 uppercase tracking-wider mb-2 ml-8">იარლიყები</h4>
+                                        <h4 className="text-xs font-semibold text-frost-400 uppercase tracking-wider mb-2 ml-8">სტიკერი</h4>
                                         <div className="flex flex-wrap gap-1.5 ml-8">
                                             {labels.map((lid) => LABEL_COLORS.find((lc) => lc.id === lid)).filter(Boolean).map((label) => (
                                                 <span key={label.id} className="px-3 py-1 rounded-md text-xs font-medium text-white" style={{ background: label.color }}>{label.name}</span>
@@ -258,7 +258,7 @@ export default function CardModal({
                                         <svg className="text-frost-400 shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                             <polyline points="9 11 12 14 22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
                                         </svg>
-                                        <h4 className="text-sm font-semibold text-frost-700">სამუშაო სია</h4>
+                                        <h4 className="text-sm font-semibold text-frost-700">თასქლისტი</h4>
                                         {totalItems > 0 && <span className="text-xs text-frost-400 ml-auto">{checkedItems}/{totalItems}</span>}
                                     </div>
                                     {totalItems > 0 && (
@@ -315,13 +315,13 @@ export default function CardModal({
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                 <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" /><line x1="7" y1="7" x2="7.01" y2="7" />
                                             </svg>
-                                            იარლიყები
+                                            სტიკერი
                                         </button>
                                         {showLabelPicker && (
                                             <>
                                                 <div className="fixed inset-0 z-40" onClick={() => setShowLabelPicker(false)} />
                                                 <div className="absolute left-0 lg:left-auto lg:right-0 bottom-10 lg:bottom-auto lg:top-10 bg-white rounded-xl shadow-xl border border-frost-200 p-3 z-50 min-w-[220px] animate-fade-in">
-                                                    <h5 className="text-xs font-semibold text-frost-400 uppercase tracking-wider mb-2">აირჩიეთ იარლიყი</h5>
+                                                    <h5 className="text-xs font-semibold text-frost-400 uppercase tracking-wider mb-2">აირჩიეთ სტიკერი</h5>
                                                     <div className="space-y-1">
                                                         {LABEL_COLORS.map((label) => (
                                                             <button key={label.id} onClick={() => toggleLabel(label.id)}
@@ -344,7 +344,7 @@ export default function CardModal({
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                 <rect x="3" y="3" width="18" height="18" rx="2" /><line x1="3" y1="9" x2="21" y2="9" />
                                             </svg>
-                                            გარეკანი
+                                            ქუდი
                                         </button>
                                         {showCoverPicker && (
                                             <>
@@ -360,7 +360,7 @@ export default function CardModal({
                                                     </div>
                                                     {card.coverColor && (
                                                         <button onClick={() => { updateCard(card.id, { coverColor: null }); setShowCoverPicker(false); }}
-                                                            className="w-full mt-2 text-xs text-frost-500 hover:text-frost-700 py-1 cursor-pointer">გარეკანის მოხსნა</button>
+                                                            className="w-full mt-2 text-xs text-frost-500 hover:text-frost-700 py-1 cursor-pointer">ქუდის მოხსნა</button>
                                                     )}
                                                 </div>
                                             </>
@@ -374,7 +374,7 @@ export default function CardModal({
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                 <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
                                             </svg>
-                                            მიმაგრება
+                                            ფოტო
                                         </button>
                                         {showAttachMenu && (
                                             <>
