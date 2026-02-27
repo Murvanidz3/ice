@@ -27,6 +27,6 @@ WHERE NOT EXISTS (SELECT 1 FROM `users` WHERE `username` = 'admin');
 
 -- Initialize empty data for admin
 INSERT INTO `user_data` (`user_id`, `board_json`, `bg_gradient`) 
-SELECT id, '{"lists":[{"id":"list-1","title":"პროექტი 1","cardIds":[]}],"cards":{},"listOrder":["list-1"]}', 'ice'
+SELECT id, '{"projects":[{"id":"proj-1","name":"პროექტი 1","lists":[],"cards":{},"listOrder":[]}],"activeProjectId":"proj-1"}', 'ice'
 FROM `users` WHERE `username` = 'admin'
 ON DUPLICATE KEY UPDATE `user_id` = VALUES(`user_id`);
