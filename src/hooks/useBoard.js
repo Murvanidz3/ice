@@ -184,7 +184,7 @@ export function useAuth() {
 // ---- Board + Projects ----
 export function useBoard(username) {
     const [appData, setAppData] = useState(null);
-    const [bgGradient, setBgGradient] = useState('ice');
+    const [bgGradient, setBgGradient] = useState('linear-gradient(135deg, #0c4a6e 0%, #7c3aed 30%, #c026d3 50%, #f43f5e 70%, #f97316 100%)');
     const [isLoading, setIsLoading] = useState(true);
 
     const loadData = useCallback(async () => {
@@ -196,7 +196,7 @@ export function useBoard(username) {
 
             if (data.success && data.board) {
                 setAppData(data.board);
-                setBgGradient(data.bg_gradient || 'ice');
+                setBgGradient(data.bg_gradient || 'linear-gradient(135deg, #0c4a6e 0%, #7c3aed 30%, #c026d3 50%, #f43f5e 70%, #f97316 100%)');
             } else {
                 setAppData(getDefaultProjectsData());
             }

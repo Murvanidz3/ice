@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 CREATE TABLE IF NOT EXISTS `user_data` (
   `user_id` int(11) NOT NULL,
   `board_json` longtext,
-  `bg_gradient` varchar(50) DEFAULT 'ice',
+  `bg_gradient` varchar(500) DEFAULT 'linear-gradient(135deg, #0c4a6e 0%, #7c3aed 30%, #c026d3 50%, #f43f5e 70%, #f97316 100%)',
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`),
   CONSTRAINT `fk_user_data_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
@@ -27,6 +27,6 @@ WHERE NOT EXISTS (SELECT 1 FROM `users` WHERE `username` = 'admin');
 
 -- Initialize empty data for admin
 INSERT INTO `user_data` (`user_id`, `board_json`, `bg_gradient`) 
-SELECT id, '{"projects":[{"id":"proj-1","name":"პროექტი 1","lists":[],"cards":{},"listOrder":[]}],"activeProjectId":"proj-1"}', 'ice'
+SELECT id, '{"projects":[{"id":"proj-1","name":"პროექტი 1","lists":[],"cards":{},"listOrder":[]}],"activeProjectId":"proj-1"}', 'linear-gradient(135deg, #0c4a6e 0%, #7c3aed 30%, #c026d3 50%, #f43f5e 70%, #f97316 100%)'
 FROM `users` WHERE `username` = 'admin'
 ON DUPLICATE KEY UPDATE `user_id` = VALUES(`user_id`);
