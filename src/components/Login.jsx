@@ -42,20 +42,21 @@ export default function Login({ onLogin }) {
                 {/* Logo */}
                 <div className="flex flex-col items-center mb-8">
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-ice-400 to-ice-600 flex items-center justify-center mb-4 shadow-lg">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="12" y1="2" x2="12" y2="22" />
-                            <line x1="2" y1="12" x2="22" y2="12" />
-                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
-                            <line x1="19.07" y1="4.93" x2="4.93" y2="19.07" />
-                            <circle cx="12" cy="12" r="3" fill="white" fillOpacity="0.3" />
-                            <line x1="12" y1="2" x2="14" y2="5" />
-                            <line x1="12" y1="2" x2="10" y2="5" />
-                            <line x1="12" y1="22" x2="14" y2="19" />
-                            <line x1="12" y1="22" x2="10" y2="19" />
-                            <line x1="2" y1="12" x2="5" y2="10" />
-                            <line x1="2" y1="12" x2="5" y2="14" />
-                            <line x1="22" y1="12" x2="19" y2="10" />
-                            <line x1="22" y1="12" x2="19" y2="14" />
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="6" y="6" width="12" height="12" rx="2" />
+                            <circle cx="12" cy="12" r="2" fill="white" fillOpacity="0.3" />
+                            <line x1="9" y1="6" x2="9" y2="2" />
+                            <line x1="12" y1="6" x2="12" y2="2" />
+                            <line x1="15" y1="6" x2="15" y2="2" />
+                            <line x1="9" y1="22" x2="9" y2="18" />
+                            <line x1="12" y1="22" x2="12" y2="18" />
+                            <line x1="15" y1="22" x2="15" y2="18" />
+                            <line x1="6" y1="9" x2="2" y2="9" />
+                            <line x1="6" y1="12" x2="2" y2="12" />
+                            <line x1="6" y1="15" x2="2" y2="15" />
+                            <line x1="22" y1="9" x2="18" y2="9" />
+                            <line x1="22" y1="12" x2="18" y2="12" />
+                            <line x1="22" y1="15" x2="18" y2="15" />
                         </svg>
                     </div>
                     <h1 className="text-3xl font-bold text-frost-800 tracking-tight">WINTRIX</h1>
