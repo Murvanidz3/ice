@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { getInitialData, getDefaultProjects as getMockProjects } from '../data/mockData';
 import { nanoid } from 'nanoid';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -186,6 +186,13 @@ export function useBoard(username) {
     const [appData, setAppData] = useState(null);
     const [bgGradient, setBgGradient] = useState('linear-gradient(135deg, #0c4a6e 0%, #7c3aed 30%, #c026d3 50%, #f43f5e 70%, #f97316 100%)');
     const [isLoading, setIsLoading] = useState(true);
+    // Track whether changes are from local edits (should save) vs server sync (should NOT save)
+    const [localVersion, setLocalVersion] = useState(0);
+    const [savedVersion, setSavedVersion] = useState(0);
+    // Track the last known server JSON to avoid unnecessary re-renders
+    const lastServerJson = useRef('');
+    // Track whether a save is currently in progress
+    const isSaving = useRef(false);
 
     const loadData = useCallback(async () => {
         if (!username) return;
@@ -195,6 +202,8 @@ export function useBoard(username) {
             const data = await res.json();
 
             if (data.success && data.board) {
+                const serverJson = JSON.stringify(data.board);
+                lastServerJson.current = serverJson;
                 setAppData(data.board);
                 setBgGradient(data.bg_gradient || 'linear-gradient(135deg, #0c4a6e 0%, #7c3aed 30%, #c026d3 50%, #f43f5e 70%, #f97316 100%)');
             } else {
@@ -213,24 +222,67 @@ export function useBoard(username) {
         loadData();
     }, [loadData]);
 
-    // Auto-save board data whenever it changes
+    // Polling: check for updates from server every 5 seconds
+    useEffect(() => {
+        if (!username || isLoading) return;
+
+        const pollInterval = setInterval(async () => {
+            // Don't poll while saving to avoid conflicts
+            if (isSaving.current) return;
+            // Don't poll if there are unsaved local changes
+            if (localVersion !== savedVersion) return;
+
+            try {
+                const res = await fetch('/api/get_board.php');
+                const data = await res.json();
+
+                if (data.success && data.board) {
+                    const serverJson = JSON.stringify(data.board);
+                    // Only update if server data is different from what we last knew
+                    if (serverJson !== lastServerJson.current) {
+                        lastServerJson.current = serverJson;
+                        setAppData(data.board);
+                        // Keep versions in sync so this doesn't trigger a save
+                        setLocalVersion(v => { const next = v + 1; setSavedVersion(next); return next; });
+                    }
+                    // Also sync background
+                    if (data.bg_gradient && data.bg_gradient !== bgGradient) {
+                        setBgGradient(data.bg_gradient);
+                    }
+                }
+            } catch (e) {
+                // Silent fail on poll — network hiccup is fine
+            }
+        }, 5000);
+
+        return () => clearInterval(pollInterval);
+    }, [username, isLoading, localVersion, savedVersion, bgGradient]);
+
+    // Auto-save board data whenever local edits happen
     useEffect(() => {
         if (!appData || isLoading) return;
+        // Only save if there are unsaved local changes
+        if (localVersion === savedVersion) return;
 
         const saveTimer = setTimeout(async () => {
+            isSaving.current = true;
             try {
                 await fetch('/api/update_board.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(appData)
                 });
+                lastServerJson.current = JSON.stringify(appData);
+                setSavedVersion(localVersion);
             } catch (e) {
                 console.error('Failed to save data to server', e);
+            } finally {
+                isSaving.current = false;
             }
         }, 800); // 800ms debounce
 
         return () => clearTimeout(saveTimer);
-    }, [appData, isLoading]);
+    }, [appData, isLoading, localVersion, savedVersion]);
 
     // Expose background update
     const updateBackground = useCallback(async (newBg) => {
@@ -264,6 +316,7 @@ export function useBoard(username) {
                 ),
             };
         });
+        setLocalVersion(v => v + 1);
     }, []);
 
     // ---- Project operations ----
@@ -274,10 +327,12 @@ export function useBoard(username) {
             projects: [...prev.projects, { id, name, ...createEmptyBoard() }],
             activeProjectId: id,
         }));
+        setLocalVersion(v => v + 1);
     }, []);
 
     const switchProject = useCallback((projectId) => {
         setAppData((prev) => ({ ...prev, activeProjectId: projectId }));
+        setLocalVersion(v => v + 1);
     }, []);
 
     const deleteProject = useCallback((projectId) => {
@@ -291,6 +346,7 @@ export function useBoard(username) {
                     prev.activeProjectId === projectId ? remaining[0].id : prev.activeProjectId,
             };
         });
+        setLocalVersion(v => v + 1);
     }, []);
 
     const renameProject = useCallback((projectId, name) => {
@@ -300,6 +356,7 @@ export function useBoard(username) {
                 p.id === projectId ? { ...p, name } : p
             ),
         }));
+        setLocalVersion(v => v + 1);
     }, []);
 
     // ---- List operations ----
