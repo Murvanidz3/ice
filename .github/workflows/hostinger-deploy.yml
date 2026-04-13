@@ -47,5 +47,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
           local-dir: ./deploy_ready/
           server-dir: ./public_html/ # Or whatever folder you want to deploy to on Hostinger
