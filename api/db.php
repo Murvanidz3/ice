@@ -6,9 +6,9 @@ error_reporting(0);
 ini_set('display_errors', '0');
 
 $host = 'localhost';
-$db = 'u888090391_ice';
-$user = 'u888090391_ice';
-$pass = 'Tormeti21!';
+$db = 'ice_db';
+$user = 'root';
+$pass = ''; // Production creds are injected by Github Actions
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

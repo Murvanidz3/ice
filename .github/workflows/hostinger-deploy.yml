@@ -32,6 +32,15 @@ jobs:
           cp -r dist/* deploy_ready/
           cp -r api deploy_ready/
 
+      - name: Inject Database Secrets
+        run: |
+          # We securely replace the local database credentials with the production secrets
+          # before sending the files to the Hostinger server.
+          sed -i "s/\$host = '.*';/\$host = '${{ secrets.DB_HOST }}';/" deploy_ready/api/db.php
+          sed -i "s/\$db = '.*';/\$db = '${{ secrets.DB_NAME }}';/" deploy_ready/api/db.php
+          sed -i "s/\$user = '.*';/\$user = '${{ secrets.DB_USER }}';/" deploy_ready/api/db.php
+          sed -i "s/\$pass = '.*';/\$pass = '${{ secrets.DB_PASS }}';/" deploy_ready/api/db.php
+
       - name: Deploy to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
