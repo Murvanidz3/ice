@@ -50,4 +50,4 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: ./deploy_ready/
-          server-dir: ./public_html/ # Or whatever folder you want to deploy to on Hostinger
+          server-dir: ./ # Update this if Hostinger FTP root is different.
