@@ -58,7 +58,7 @@ export default function Login({ onLogin }) {
                             <line x1="22" y1="12" x2="19" y2="14" />
                         </svg>
                     </div>
-                    <h1 className="text-3xl font-bold text-frost-800 tracking-tight">ჭრელო</h1>
+                    <h1 className="text-3xl font-bold text-frost-800 tracking-tight">WINTRIX</h1>
                     <p className="text-frost-400 text-sm mt-1">შედით თქვენს სამუშაო სივრცეში</p>
                 </div>
 
