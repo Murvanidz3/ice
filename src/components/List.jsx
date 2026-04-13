@@ -112,13 +112,13 @@ export default function List({
                                     setIsEditingTitle(false);
                                 }
                             }}
-                            className="flex-1 bg-white/30 text-white font-semibold text-sm px-2 py-1 rounded-lg outline-none focus:ring-2 focus:ring-white/40"
+                            className="flex-1 bg-white/30 text-white font-bold text-[15px] px-2 py-1 rounded-lg outline-none focus:ring-2 focus:ring-white/40"
                             onClick={(e) => e.stopPropagation()}
                             onPointerDown={(e) => e.stopPropagation()}
                         />
                     ) : (
                         <h3
-                            className="flex-1 font-semibold text-white text-sm px-1 py-1 cursor-text rounded hover:bg-white/10 transition-colors"
+                            className="flex-1 font-bold text-white text-[15px] px-1 py-1 cursor-text rounded hover:bg-white/10 transition-colors"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setIsEditingTitle(true);
