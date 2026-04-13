@@ -50,4 +50,5 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: ./deploy_ready/
-          server-dir: ./ # Update this if Hostinger FTP root is different.
+          server-dir: ./
+          dangerous-clean-slate: true
