@@ -10,12 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Rate limit: max 5 login attempts per 5 minutes
-if (!check_rate_limit('login', 5, 300)) {
-    http_response_code(429);
-    echo json_encode(['success' => false, 'message' => 'ძალიან ბევრი მცდელობა. სცადეთ 5 წუთში.']);
-    exit;
-}
+// Rate limit removed by user request
 
 $data = json_decode(file_get_contents('php://input'), true);
 $username = sanitize_string($data['username'] ?? '', 50);
