@@ -59,6 +59,22 @@ export default function List({
         }
     };
 
+    const addContainerRef = useRef(null);
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (isAddingCard && addContainerRef.current && !addContainerRef.current.contains(event.target)) {
+                if (!newCardTitle.trim()) {
+                    setIsAddingCard(false);
+                    setNewCardTitle('');
+                } else {
+                    handleAddCard();
+                }
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isAddingCard, newCardTitle, addCard, list.id]);
+
     const handleTitleSave = () => {
         if (editTitle.trim() && editTitle.trim() !== list.title) {
             updateListTitle(list.id, editTitle.trim());
@@ -184,7 +200,7 @@ export default function List({
                 {/* Add Card */}
                 <div className="px-2 pb-2">
                     {isAddingCard ? (
-                        <div className="animate-fade-in">
+                        <div ref={addContainerRef} className="animate-fade-in">
                             <textarea
                                 ref={addInputRef}
                                 value={newCardTitle}

@@ -19,6 +19,22 @@ export default function AddList({ onAdd }) {
         }
     };
 
+    const addContainerRef = useRef(null);
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (isAdding && addContainerRef.current && !addContainerRef.current.contains(event.target)) {
+                if (!title.trim()) {
+                    setIsAdding(false);
+                    setTitle('');
+                } else {
+                    handleAdd();
+                }
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isAdding, title, onAdd]);
+
     if (!isAdding) {
         return (
             <button
@@ -35,7 +51,7 @@ export default function AddList({ onAdd }) {
     }
 
     return (
-        <div className="w-[72vw] sm:w-[300px] min-w-[72vw] sm:min-w-[300px] glass-list rounded-xl p-3 animate-fade-in">
+        <div ref={addContainerRef} className="w-[72vw] sm:w-[300px] min-w-[72vw] sm:min-w-[300px] glass-list rounded-xl p-3 animate-fade-in">
             <input
                 ref={inputRef}
                 value={title}

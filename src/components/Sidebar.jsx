@@ -38,6 +38,22 @@ export default function Sidebar({
         }
     };
 
+    const addContainerRef = useRef(null);
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (isAdding && addContainerRef.current && !addContainerRef.current.contains(event.target)) {
+                if (!newName.trim()) {
+                    setIsAdding(false);
+                    setNewName('');
+                } else {
+                    handleAdd();
+                }
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isAdding, newName, addProject]);
+
     const handleRename = (id) => {
         if (editName.trim()) {
             renameProject(id, editName.trim());
@@ -108,7 +124,7 @@ export default function Sidebar({
                     <div className="flex-1 overflow-y-auto py-2 px-2">
                         {/* Add Project Input */}
                         {isAdding && (
-                            <div className="animate-fade-in mb-2 px-1">
+                            <div ref={addContainerRef} className="animate-fade-in mb-2 px-1">
                                 <input
                                     ref={addInputRef}
                                     value={newName}
