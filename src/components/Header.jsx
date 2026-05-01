@@ -116,7 +116,9 @@ export default function Header({ activeProject, currentUser, isAdmin, resetBoard
                                 <line x1="22" y1="9" x2="18" y2="9" /><line x1="22" y1="12" x2="18" y2="12" /><line x1="22" y1="15" x2="18" y2="15" />
                             </svg>
                         </div>
-                        <h1 className="text-white font-bold text-xl tracking-tight leading-none">WINTRIX</h1>
+                        <h1 className="text-white font-bold text-xl tracking-tight leading-none max-w-[200px] sm:max-w-[280px] truncate" title={currentUser?.username || ''}>
+                            {currentUser?.username || ''}
+                        </h1>
                     </a>
                     {activeProject && (
                         <>
